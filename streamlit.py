@@ -46,47 +46,46 @@ with st.sidebar:
     # Model loading status
     model_status = st.empty()
 
-# Check if token is provided and attempt to load the model
-if "model" not in st.session_state and load_model_button:
-    if hf_token:
-        model_status.info("Downloading and loading the model...")
-        try:
-            model, preprocess, device = download_and_load_model(hf_token)
-            st.session_state["model"] = model
-            st.session_state["preprocess"] = preprocess
-            st.session_state["device"] = device
-            model_status.success("Model loaded successfully!")
-        except Exception as e:
-            model_status.error(f"Error loading model: {e}")
-    else:
-        model_status.warning("Please enter a valid Hugging Face token.")
+    # Check if token is provided and attempt to load the model
+    if "model" not in st.session_state and load_model_button:
+        if hf_token:
+            model_status.info("Downloading and loading the model...")
+            try:
+                model, preprocess, device = download_and_load_model(hf_token)
+                st.session_state["model"] = model
+                st.session_state["preprocess"] = preprocess
+                st.session_state["device"] = device
+                model_status.success("Model loaded successfully!")
+            except Exception as e:
+                model_status.error(f"Error loading model: {e}")
+        else:
+            model_status.warning("Please enter a valid Hugging Face token.")
 
-# Main Application
-if "model" in st.session_state:
-    model = st.session_state["model"]
-    preprocess = st.session_state["preprocess"]
-    device = st.session_state["device"]
+    # Main Application
+    if "model" in st.session_state:
+        model = st.session_state["model"]
+        preprocess = st.session_state["preprocess"]
+        device = st.session_state["device"]
 
-    # File input section
-    st.header("File Input")
+        # File input section
+        st.header("File Input")
 
-    # Image patch file uploader
-    seq_file_extensions = ["jpg", "jpeg", "png"]
-    patch_file = st.file_uploader("##### Image patch file:", type=seq_file_extensions)
-    st.link_button("Example file", "https://github.com/amcrabtree/conch-test/blob/master/test/tcga_test6.png")
+        # Image patch file uploader
+        seq_file_extensions = ["jpg", "jpeg", "png"]
+        patch_file = st.file_uploader("##### Image patch file:", type=seq_file_extensions)
+        st.link_button("Example file", "https://github.com/amcrabtree/conch-test/blob/master/test/tcga_test6.png")
 
-    # Search terms file uploader
-    search_file = st.file_uploader("##### Search terms file:", type=["csv", "tsv", "txt"])
-    st.link_button("Example file", "https://github.com/amcrabtree/conch-test/blob/master/test/search_terms.txt")
+        # Search terms file uploader
+        search_file = st.file_uploader("##### Search terms file:", type=["csv", "tsv", "txt"])
+        st.link_button("Example file", "https://github.com/amcrabtree/conch-test/blob/master/test/search_terms.txt")
 
     # Matching section
-    st.header("Match Text to Image")
     if patch_file and search_file:
         try:
             # Load and preprocess the image
             image = Image.open(patch_file)
             image_tensor = preprocess(image).unsqueeze(0).to(device)
-            st.image(image.resize((224, 224)), caption="Uploaded Image", use_column_width=True)
+            st.image(image.resize((224, 224)), caption="Uploaded Image")
 
             # Load and tokenize search terms
             search_text = search_file.read().decode("utf-8")
