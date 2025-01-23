@@ -1,0 +1,6 @@
+streamlit
+conch @ git+https://github.com/owner/repo@main
+pandas 
+huggingface_hub
+torch
+Pillow

@@ -1,0 +1,9 @@
+breast
+lung
+cancer
+lymphocytes
+stroma
+lymph node
+macrophages
+red blood cells
+necrosis
