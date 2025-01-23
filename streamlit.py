@@ -67,10 +67,8 @@ with st.sidebar:
         preprocess = st.session_state["preprocess"]
         device = st.session_state["device"]
 
-        # File input section
+        # File input
         st.header("File Input")
-
-        # File uploader
         seq_file_extensions = ["jpg", "jpeg", "png"]
         patch_file = st.file_uploader("##### Image patch file [[example](https://github.com/amcrabtree/conch-test/blob/main/test/tcga_test6.png)]:", type=seq_file_extensions)
         search_file = st.file_uploader("##### Search terms file [[example](https://github.com/amcrabtree/conch-test/blob/master/test/search_terms.txt)]:", type=["csv", "tsv", "txt"])
