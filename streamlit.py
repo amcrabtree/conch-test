@@ -73,32 +73,32 @@ with st.sidebar:
         patch_file = st.file_uploader("##### Image patch file [[example](https://github.com/amcrabtree/conch-test/blob/main/test/tcga_test6.png)]:", type=seq_file_extensions)
         search_file = st.file_uploader("##### Search terms file [[example](https://github.com/amcrabtree/conch-test/blob/master/test/search_terms.txt)]:", type=["csv", "tsv", "txt"])
 
-    # Matching section
-    if "model" in st.session_state:
-        if patch_file and search_file:
-            try:
-                # Load and preprocess the image
-                image = Image.open(patch_file)
-                image_tensor = preprocess(image).unsqueeze(0).to(device)
-                st.image(image.resize((224, 224)), caption="Uploaded Image")
+# Matching section
+if "model" in st.session_state:
+    if patch_file and search_file:
+        try:
+            # Load and preprocess the image
+            image = Image.open(patch_file)
+            image_tensor = preprocess(image).unsqueeze(0).to(device)
+            st.image(image.resize((224, 224)), caption="Uploaded Image")
 
-                # Load and tokenize search terms
-                search_text = search_file.read().decode("utf-8")
-                search_terms = search_text.split("\n")
-                tokenizer = get_tokenizer()
-                tokenized_prompts = tokenize(texts=search_terms, tokenizer=tokenizer).to(device)
+            # Load and tokenize search terms
+            search_text = search_file.read().decode("utf-8")
+            search_terms = search_text.split("\n")
+            tokenizer = get_tokenizer()
+            tokenized_prompts = tokenize(texts=search_terms, tokenizer=tokenizer).to(device)
 
-                # Perform inference
-                with torch.inference_mode():
-                    image_embeddings = model.encode_image(image_tensor)
-                    text_embeddings = model.encode_text(tokenized_prompts)
-                    sim_scores = (image_embeddings @ text_embeddings.T).squeeze(0)
+            # Perform inference
+            with torch.inference_mode():
+                image_embeddings = model.encode_image(image_tensor)
+                text_embeddings = model.encode_text(tokenized_prompts)
+                sim_scores = (image_embeddings @ text_embeddings.T).squeeze(0)
 
-                # Sort and display results
-                ranked_scores, ranked_indices = torch.sort(sim_scores, descending=True)
-                results = [{"Search Term": search_terms[i], "Similarity Score": f"{score:.3f}"} 
-                        for i, score in zip(ranked_indices, ranked_scores)]
-                results_df = pd.DataFrame(results)
-                st.dataframe(results_df, use_container_width=True, hide_index=True)
-            except Exception as e:
-                st.error(f"Error during matching: {e}")
+            # Sort and display results
+            ranked_scores, ranked_indices = torch.sort(sim_scores, descending=True)
+            results = [{"Search Term": search_terms[i], "Similarity Score": f"{score:.3f}"} 
+                    for i, score in zip(ranked_indices, ranked_scores)]
+            results_df = pd.DataFrame(results)
+            st.dataframe(results_df, use_container_width=True, hide_index=True)
+        except Exception as e:
+            st.error(f"Error during matching: {e}")
