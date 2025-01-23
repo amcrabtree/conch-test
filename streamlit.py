@@ -70,14 +70,10 @@ with st.sidebar:
         # File input section
         st.header("File Input")
 
-        # Image patch file uploader
+        # File uploader
         seq_file_extensions = ["jpg", "jpeg", "png"]
-        patch_file = st.file_uploader("##### Image patch file:", type=seq_file_extensions)
-        st.link_button("Example file", "https://github.com/amcrabtree/conch-test/blob/master/test/tcga_test6.png")
-
-        # Search terms file uploader
-        search_file = st.file_uploader("##### Search terms file:", type=["csv", "tsv", "txt"])
-        st.link_button("Example file", "https://github.com/amcrabtree/conch-test/blob/master/test/search_terms.txt")
+        patch_file = st.file_uploader("##### Image patch file [[example](https://github.com/amcrabtree/conch-test/blob/main/test/tcga_test6.png)]:", type=seq_file_extensions)
+        search_file = st.file_uploader("##### Search terms file [[example](https://github.com/amcrabtree/conch-test/blob/master/test/search_terms.txt)]:", type=["csv", "tsv", "txt"])
 
 # Matching section
 if patch_file and search_file:
