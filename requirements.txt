@@ -1,5 +1,5 @@
 streamlit
-conch @ git+https://github.com/owner/repo@main
+conch @ git+https://github.com/mahmoodlab/CONCH@main
 pandas 
 huggingface_hub
 torch
