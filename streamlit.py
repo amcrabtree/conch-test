@@ -1,4 +1,4 @@
-import streamlit_conch_web as st
+import streamlit as st
 from io import StringIO
 from PIL import Image
 import pandas as pd
