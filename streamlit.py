@@ -71,11 +71,11 @@ with st.sidebar:
         st.header("File Input")
         seq_file_extensions = ["jpg", "jpeg", "png"]
         patch_file = st.file_uploader("##### Image patch file [[example](https://github.com/amcrabtree/conch-test/blob/main/test/tcga_test6.png)]:", type=seq_file_extensions)
-        search_file = st.file_uploader("##### Search terms file [[example](https://github.com/amcrabtree/conch-test/blob/master/test/search_terms.txt)]:", type=["csv", "tsv", "txt"])
+        search_text = st.text_area("Enter search terms, one phrase per line:", "tumor\nstroma\nimmune cells\nred blood cells\nnecrosis\nductal carcinoma") 
 
 # Matching section
 if "model" in st.session_state:
-    if patch_file and search_file:
+    if patch_file and search_text:
         try:
             # Load and preprocess the image
             image = Image.open(patch_file)
@@ -83,7 +83,6 @@ if "model" in st.session_state:
             st.image(image.resize((224, 224)), caption="Uploaded Image")
 
             # Load and tokenize search terms
-            search_text = search_file.read().decode("utf-8")
             search_terms = search_text.split("\n")
             tokenizer = get_tokenizer()
             tokenized_prompts = tokenize(texts=search_terms, tokenizer=tokenizer).to(device)
