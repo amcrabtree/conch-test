@@ -2,7 +2,7 @@
 
 This app matches similarity between an image and text using the model CONCH.  
 
-The web app is now available! See [https://conch-app.streamlit.app/](https://conch-app.streamlit.app/)
+The web app is now available! See [https://conch-app.streamlit.app/](https://conch-app.streamlit.app/) Note that if the app gets used a lot, it will exceed its resource limits, so check back later if it doesn't work. 
 
 
 ## Install
