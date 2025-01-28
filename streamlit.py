@@ -3,7 +3,6 @@ from PIL import Image
 import pandas as pd
 import torch
 from huggingface_hub import hf_hub_download
-
 from conch.open_clip_custom import create_model_from_pretrained, tokenize, get_tokenizer
 
 # Set Streamlit page configuration
@@ -13,7 +12,6 @@ st.set_page_config(page_title="CONCH Matcher")
 MODEL_REPO = "MahmoodLab/CONCH"
 MODEL_FILENAME = "pytorch_model.bin"
 
-# Cache the model loading function to avoid re-downloading and re-loading
 @st.cache_resource
 def download_and_load_model(token):
     """
@@ -25,7 +23,7 @@ def download_and_load_model(token):
         filename=MODEL_FILENAME, 
         use_auth_token=token
     )
-
+    
     # Load the model and preprocessing function
     model, preprocess = create_model_from_pretrained(
         model_cfg="conch_ViT-B-16", checkpoint_path=model_path
@@ -72,12 +70,9 @@ with st.sidebar:
         # File input section
         st.header("File Input")
         seq_file_extensions = ["jpg", "jpeg", "png"]
-        patch_file = st.file_uploader(
-            "##### Image patch file:", type=seq_file_extensions)
-        search_text = st.text_area(
-            "Enter search terms, one phrase per line:", 
-            "tumor\nstroma\nimmune cells\nred blood cells\nnecrosis\nductal carcinoma") 
-        
+        patch_file = st.file_uploader("##### Image patch file [[example](https://github.com/amcrabtree/conch-test/blob/main/test/tcga_test6.png)]:", type=seq_file_extensions)
+        search_text = st.text_area("Enter search terms, one phrase per line:", "tumor\nstroma\nimmune cells\nred blood cells\nnecrosis\nductal carcinoma") 
+
 # Matching section
 if "model" in st.session_state:
     if patch_file and search_text:
@@ -104,6 +99,5 @@ if "model" in st.session_state:
                     for i, score in zip(ranked_indices, ranked_scores)]
             results_df = pd.DataFrame(results)
             st.dataframe(results_df, use_container_width=True, hide_index=True)
-
         except Exception as e:
             st.error(f"Error during matching: {e}")
